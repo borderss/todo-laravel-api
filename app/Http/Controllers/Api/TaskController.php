@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -25,13 +26,9 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        $validate = $request->validate([
-          'title' => 'required',
-          'desc' => 'required'
-        ]);
-        $task = Task::create($validate);
+        $task = Task::create($request->validated());
         return new TaskResource($task);
     }
 
@@ -41,9 +38,8 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Task $task)
     {
-      $task = Task::find($id);
       return new TaskResource($task);
     }
 
@@ -54,15 +50,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, Task $task)
     {
-      $validate = $request->validate([
-        'title' => 'required',
-        'desc' => 'required'
-      ]);
-
-      $task = Task::find($id);
-      $task->update($validate);
+      $task->update($request->validated());
 
       return new TaskResource($task);
     }
@@ -73,9 +63,8 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        $task = Task::find($id);
         $task->delete();
         return new TaskResource($task);
     }

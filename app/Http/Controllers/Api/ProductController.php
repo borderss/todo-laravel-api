@@ -85,4 +85,8 @@ class ProductController extends Controller
 
       return new ProductResource($product);
     }
+
+    public function dosomething(){
+      dd("tu esi daunis");
+    }
 }
