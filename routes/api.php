@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\PostCommentController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
@@ -33,4 +35,6 @@ Route::middleware('auth:api')->group(function() {
   Route::get('/logout', [UserController::class, 'logout']);
   Route::apiResource('/tasks', TaskController::class);
   Route::apiResource('/products', ProductController::class);
+  Route::apiResource('/posts', PostController::class);
+  Route::apiResource('/postComments', PostCommentController::class);
 });
