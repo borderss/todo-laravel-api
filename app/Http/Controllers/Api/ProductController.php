@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -25,16 +26,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $validate = $request->validate([
-          'name' => 'required',
-          'desc' => 'required',
-          'price' => 'required',
-          'valid_until' => 'required|date_format:Y-m-d|after:now'
-        ]);
-
-        $product = Product::create($validate);
+        $product = Product::create($request->validated());
         return new ProductResource($product);
     }
 
@@ -44,9 +38,8 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::find($id);
         return new ProductResource($product);
     }
 
@@ -57,17 +50,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, Product $product)
     {
-      $validate = $request->validate([
-        'name' => 'required',
-        'desc' => 'required',
-        'price' => 'required|numeric',
-        'valid_until' => 'required|date_format:Y-m-d|after:now'
-      ]);
-
-      $product = Product::find($id);
-      $product->update($validate);
+      $product->update($request->validated());
 
       return new ProductResource($product);
     }
@@ -78,15 +63,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-      $product = Product::find($id);
       $product->delete();
-
       return new ProductResource($product);
-    }
-
-    public function dosomething(){
-      dd("tu esi daunis");
     }
 }

@@ -41,7 +41,10 @@ class UserController extends Controller
         ]);
       };
 
-      $token = auth()->user()->createToken('accessToken')->accessToken;
+      /** @var \App\Models\MyUserModel $user **/
+      $user = Auth::user();
+      
+      $token = $user->createToken('accessToken')->accessToken;
       return response()->json([
         'user' => new UserResource(auth()->user()),
         'access_token' => $token,
@@ -49,7 +52,10 @@ class UserController extends Controller
     }
 
     public function logout() {
-      auth()->user()->token()->revoke();
+      /** @var \App\Models\MyUserModel $user **/
+      $user = Auth::user();
+
+      $user->token()->revoke();
 
       return response()->json([
           'message' => [
